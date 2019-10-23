@@ -1,0 +1,108 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<struts>
+    <constant name="struts.devMode" value="false" />
+    <package name="default" extends="struts-default">
+        
+        <action name="login" class="com.utez.edu.controller.recuperarcontrasenha.RecuperarContrasenhaAction">
+            <result>/IniciarSesion.jsp</result>
+        </action>
+        
+        <action name="iniciarSesion" class="com.utez.edu.controller.sesion.InicioSesionAction" method="iniciarSesion" >
+            <result name="success" type="redirectAction" >
+                <param name="actionName">inicio</param>
+                <param name="mensaje">${mensaje}</param>
+            </result>
+            <result name="error">/IniciarSesion.jsp</result>
+        </action>
+        
+        <action name="cerrarSesion" class="com.utez.edu.controller.sesion.InicioSesionAction" method="cerrarSesion" >
+            <result name="success">/IniciarSesion.jsp</result>
+        </action>
+        
+    </package> 
+    
+    <package name="privados" extends="struts-default">
+        
+        <interceptors>
+            <!--   Este es el nuevo interceptor el de sesion-->
+            <interceptor name="sesionValida" class="servicios.interceptores.InterceptorSesion" />
+            <!--aqui define una nueva pila de interceptores--> 
+            <interceptor-stack name="miPilaDeInterceptores">
+                <!--                esa pila esta consituida por 
+                tu nuevo interceptor -->
+                <interceptor-ref name="sesionValida"/>
+                <!--y la pila por defecto de interceptores de struts-->
+                <interceptor-ref name="defaultStack" />
+                
+            </interceptor-stack>
+        </interceptors>
+        <!--defines que la nueva pila de interceptores por defecto es la que tu creates-->
+        <default-interceptor-ref name="miPilaDeInterceptores" />
+         
+        <global-results>
+            <result name="NOLOGIN">
+                <param name="location">/IniciarSesion.jsp</param>
+                <param name="status">401</param>
+            </result>
+        </global-results>
+        
+        <action name="inicio">
+            <result>/vistas/Inicio.jsp</result>
+        </action>
+        
+        
+        <!--ACTIONS DE LA GESTIÓN DE LAS MASRCAS-->
+        <action name="registrarMarca" class="com.utez.edu.controller.marca.MarcaAction" method="registrarMarca">
+            <result name="success" type="redirectAction">consultarMarcas</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="consultarMarcas" class="com.utez.edu.controller.marca.MarcaAction" method="consultarMarcas">
+            <result name="success">/vistas/marca/Marcas.jsp</result>
+        </action>
+        <action name="eliminarMarca" class="com.utez.edu.controller.marca.MarcaAction" method="eliminarMarca">
+            <result name="success" type="redirectAction">consultarMarcas</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="consultaMarcaId" class="com.utez.edu.controller.marca.MarcaAction" method="consultaMarcaId">
+            <result name="success">/vistas/marca/ModificarMarca.jsp</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="modificarMarca" class="com.utez.edu.controller.marca.MarcaAction" method="modificarMarca">
+            <result name="success" type="redirectAction">consultarMarcas</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <!--FIN DE LOS ACTIONS DE LA GESTIÓN DE LAS MASRCAS-->
+        
+        
+        <!--ACTIONS DE LA GESTIÓN DE DULCES-->
+        <action name="nuevoDulce" class="com.utez.edu.controller.dulce.DulceAction" method="nuevoDulce">
+            <result name="success">/vistas/dulce/RegistrarDulce.jsp</result>
+        </action>
+        <action name="registrarDulce" class="com.utez.edu.controller.dulce.DulceAction" method="registrarDulce">
+            <result name="success" type="redirectAction">consultarDulces</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="consultarDulces" class="com.utez.edu.controller.dulce.DulceAction" method="consultarDulces">
+            <result name="success">/vistas/dulce/Dulces.jsp</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="consultarDulceId" class="com.utez.edu.controller.dulce.DulceAction" method="consultarDulceId">
+            <result name="success">/vistas/dulce/ModificarDulce.jsp</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <action name="eliminarDulce" class="com.utez.edu.controller.dulce.DulceAction" method="eliminarDulce">
+            <result name="success" type="redirectAction">consultarDulces</result>
+            <result name="error">/vistas/Error.jsp</result>
+        </action>
+        <!--ACTIONS DE LA GESTIÓN DE DULCES-->
+        
+    </package>          
+</struts>
