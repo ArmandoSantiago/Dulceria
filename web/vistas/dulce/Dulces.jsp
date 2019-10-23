@@ -9,6 +9,7 @@
 <% String context = request.getContextPath();%>
 
 <s:if test="#session.usuario.nombreCompleto==null">
+
     <script>
         window.location.href = "<%=context%>/login";
     </script>
